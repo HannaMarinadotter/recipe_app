@@ -3,7 +3,15 @@ import { getComments, createComment } from "../services/comment.service";
 
 export const getCommentsController = async (req: Request, res: Response) => {
   try {
-    const comments = await getComments();
+    const recipeId = req.query.recipeId as string;
+
+    if (!recipeId || typeof recipeId !== "string") {
+      return res.status(400).json({
+        message: "Invalid recipe ID",
+      });
+    }
+
+    const comments = await getComments(recipeId);
 
     res.status(200).json({
       success: true,

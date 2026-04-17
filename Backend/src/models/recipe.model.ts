@@ -4,6 +4,7 @@ export interface Recipe {
   title: string;
   description: string;
   ingredients: string[];
+
   instructions: string;
 }
 
@@ -14,6 +15,6 @@ const recipeSchema = new Schema<Recipe>({
   instructions: { type: String, required: true },
 });
 
-const Recipe = model<Recipe>("Recipe", recipeSchema);
+const RecipeModel = model<Recipe>("Recipe", recipeSchema);
 
-export default Recipe;
+export default RecipeModel;

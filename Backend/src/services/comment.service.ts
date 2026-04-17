@@ -1,8 +1,12 @@
 import pool from "../config/mysql";
 
-export const getComments = async () => {
+export const getComments = async (recipeId: string) => {
   try {
-    const [rows] = await pool.execute("SELECT * FROM comments");
+    if (!recipeId) {
+      throw new Error("Missing recipe ID");
+    }
+
+    const [rows] = await pool.execute("SELECT * FROM comments WHERE recipe_id = ?", [recipeId]);
 
     if (!rows) {
       throw new Error("No comments found");

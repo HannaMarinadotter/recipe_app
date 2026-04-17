@@ -8,7 +8,7 @@ export const getRecipesController = async (req: Request, res: Response) => {
     res.status(200).json(recipes);
   } catch (error) {
     res.status(500).json({
-      message: "Failed to fetch recipes",
+      message: "Failed to fetch the recipes",
       error,
     });
   }

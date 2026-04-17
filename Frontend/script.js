@@ -29,18 +29,21 @@ function displayRecipes(recipes) {
 
     article.addEventListener("click", () => {
       selectedRecipeId = recipe._id;
+      fetchComments(selectedRecipeId);
     });
 
     recipesContainer.appendChild(article);
   });
 }
 
-async function fetchComments() {
+async function fetchComments(recipeId) {
   try {
-    const response = await fetch("http://localhost:3000/api/comments");
-    const comments = await response.json();
+    const response = await fetch(
+      `http://localhost:3000/api/comments?recipeId=${recipeId}`,
+    );
+    const data = await response.json();
 
-    displayComments(comments);
+    displayComments(data.comments);
   } catch (error) {
     console.error("Error fetching comments:", error);
   }
@@ -68,15 +71,15 @@ form.addEventListener("submit", async (e) => {
   const nameInput = form.querySelector("input[name='name']");
   const textarea = form.querySelector("textarea[name='comment']");
 
-  const name = nameInput.value.trim();
-  const comment = textarea.value.trim();
+  const author = nameInput.value.trim();
+  const commentText = textarea.value.trim();
 
   if (!selectedRecipeId) {
     alert("Please select a recipe first");
     return;
   }
 
-  if (!name || !comment) {
+  if (!author || !commentText) {
     alert("Please fill in all fields");
     return;
   }
@@ -89,19 +92,17 @@ form.addEventListener("submit", async (e) => {
       },
       body: JSON.stringify({
         recipe_id: selectedRecipeId,
-        name,
-        comment,
+        name: author,
+        comment: commentText,
       }),
     });
 
     nameInput.value = "";
     textarea.value = "";
-
-    fetchComments();
+    fetchComments(selectedRecipeId);
   } catch (error) {
     console.error("Error submitting comment:", error);
   }
 });
 
 fetchRecipes();
-fetchComments();
